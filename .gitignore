@@ -1,0 +1,14 @@
+*.log
+*.pot
+*.pyc
+pycache/
+src/mysite/settings_local.py
+db.sqlite3
+
+
+**/media/**
+!**/media
+
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block extra_js %}
+<script>
+$(function() {
+  $('#loader-bg ,#loader').css('display','block');//ローディング画像を表示
+});
+
+$(window).on("load",function () { //読み込み完了したら実行する
+  $('#loader-bg').css('display','none');//ローディングを隠す
+  $('#loader').css('display','none');
+  $('#contents').fadeIn().removeClass("is-hide");//コンテンツを表示する
+});
+
+$(function(){
+  setTimeout('stopload()',10000);　//いつまでもローディング状態にならないように10秒で強制表示させる
+
+});
+
+function stopload(){ //強制表示の関数
+  $('#contens').css('display','block');
+  $('#loader-bg').delay(900).fadeOut(800);
+  $('#loader').delay(600).fadeOut(300);
+}
+</script>
+{% endblock extra_js %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 col-lg-2">
+        <div class="list-group">
+          {% for kidsProfile in kidsProfiles %}
+            <a href="{% url 'phys:graph_page_display' %}{{kidsProfile.id}}" class="list-group-item list-group-item-action">{{kidsProfile.name}}</a>
+          {% endfor %}
+        </div>
+        <br>
+   </div>
+    <div class="col-md-12 col-lg-7 overflow-auto">
+        <div class="card">
+            <div class="card-header">{{ kidsName }}</div>
+
+            <div class="card-body">
+                <div id="loader-bg">
+                    <div id="loader">
+                        <div class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <img src="{% url 'phys:graph_image_display' kidsProfileId %}" id="contents" class="img-fluid is-hide">
+            </div>
+        </div>
+    </div>
+{% endblock %}

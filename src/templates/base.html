@@ -1,0 +1,55 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>kids Growth</title>
+
+        <link rel="stylesheet" href="{% static 'css/kidsGrowth.css' %}">
+        <link rel="stylesheet" href="{% static 'css/lightbox.min.css' %}">
+        <script src="{% static 'js/lightbox-plus-jquery.min.js' %}"></script>
+        {% block extra_js %}{% endblock %}
+        {% load bootstrap4 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+    </head>
+    <body>
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark mt-3 mb-3">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="sr-only">メニュー</span>  
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="">Kids Growth</a>
+            <div class="collapse navbar-collapse" id="navbarNav4">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'phys:phys_data_list' %}">身長体重データ</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'phys:graph_page_display' %}">成長曲線</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'shoes:shoes_data_list' %}">シューズ一覧</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'users:mypage' %}">マイページ</a>
+                  </li>
+                  {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:logout' %}">ログアウト</a>
+                    </li>
+                  {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:login' %}">ログイン</a>
+                    </li>
+                  {% endif %}
+                </ul>
+            </div>
+        </nav>
+
+        <div class="content container">
+		  {% block content %}
+          {% endblock %}
+        </div>
+    </body>
+</html>

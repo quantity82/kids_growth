@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+
+
+
+  db-postgres:
+    image: postgres
+
+#　本番デプロイ用定義
+#　開発中は、こっちは全部コメントアウトするよ
+  nginx:
+    image: nginx:1.13
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./nginx/uwsgi_params:/etc/nginx/uwsgi_params
+      - ./static:/static
+    depends_on:
+      - web
+  web:
+    build: ./web
+    volumes:
+      - ./src:/code
+      - ./static:/static
+    depends_on:
+      - db-postgres
+    command: uwsgi --socket :8000 --module mysite.wsgi
+    expose:
+     - "8000"
+
+
+#　開発中定義
+#　本番にあげるときはこっちをコメントアウトするよ
+#
+#  web:
+#    build: ./web
+#    volumes:
+#      - ./src:/code
+#      - ./static:/static
+#    depends_on:
+#      - db-postgres
+#    command: python manage.py runserver 0.0.0.0:8000
+#    ports:
+#      - "8000:8000"

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block extra_js %}
+<script>
+$(function() {
+  $('.del_confirm').on('click', function () {
+     $("#del_pk").text($(this).data("pk"));
+     $('#del_url').attr('href', $(this).data("url"));
+
+     $(this).attr('href', href);
+  });
+});
+</script>
+{% endblock extra_js %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 col-lg-2">
+        <div class="list-group">
+          {% for kidsProfile in kidsProfiles %}
+            <a href="/shoes/list/{{kidsProfile.id}}" class="list-group-item list-group-item-action">{{kidsProfile.name}}</a>
+          {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-10 overflow-auto">
+
+        <div class="card">
+            <div class="card-header">
+                {{ kidsName }}
+            </div>
+
+            <div class="card-body">
+                <div class="container-fluid">
+                    {% for shoes_data_post in shoes_data_posts %}
+                    <div class="row">
+                        {% if shoes_data_post.shoes_image %}
+                            <a href="{{ shoes_data_post.shoes_image.url }}"
+                               style="background-image: url({{ shoes_data_post.shoes_image.url }})"
+                               class="col-4 col-lg-2 border shoes_img" data-lightbox="demo"></a>
+                        {% else %}
+                            <a href="/static/images/noimage.png"
+                               style="background-image: url(/static/images/noimage.png)"
+                               class="col-4 col-lg-2 border shoes_img" data-lightbox="demo"></a>
+                        {% endif %}
+                        <div class="col-8 col-lg-10 pl-lg-5">
+                            <div class="row">
+                                <div class="col-md-12 col-lg-2 mb-2 rounded bg-secondary">名前</div>
+                                <div class="col-md-12 col-lg-3 mb-2">{{ shoes_data_post.kidsProfile }}</div>
+                                <div class="col-md-0  col-lg-7 "></div>
+                                <div class="col-md-12 col-lg-2 mb-2 rounded bg-secondary">購入日</div>
+                                <div class="col-md-12 col-lg-3 mb-2">{{ shoes_data_post.buy_date }}</div>
+                                <div class="col-md-0  col-lg-1 "></div>
+                                <div class="col-md-12 col-lg-2 mb-2 rounded bg-secondary">サイズ</div>
+                                <div class="col-md-12 col-lg-3 mb-2">{{ shoes_data_post.shoes_size }}cm</div>
+                                <div class="col-md-0  col-lg-1 "></div>
+                                <div class="w-100"></div>
+                                <div class="col-lg-2 rounded bg-secondary">メモ</div>
+                                <div class="col-lg-10">{{ shoes_data_post.shoes_memo }}</div>
+                                <div class="col-12 text-right mt-2">
+                                    <a href="{% url 'shoes:shoes_data_edit' shoes_data_post.id %}" role="button" class="btn btn-success btn-sm">編集</a>
+                                    <button type="button" class="btn btn-danger btn-sm del_confirm" data-toggle="modal" data-target="#delete_modal"
+                                        data-pk="{{ shoes_data_post.pk }}" data-url="{% url 'shoes:shoes_data_delete' shoes_data_post.id %}">削除</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'shoes:shoes_data_add' %}" role="button" class="btn btn-primary mr-auto">追加</a>
+
+
+        <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="label1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        削除しても良いですか？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+                        <a href="#" id="del_url" class="btn btn-danger">削除</a>
+                    </div>
+                 </div>
+             </div>
+        </div>
+    </div>
+{% endblock %}

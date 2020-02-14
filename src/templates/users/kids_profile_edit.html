@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!--日付入力フォーマット用-->
+{{ form.media }}
+
+<div class="col-md-12 col-lg-5">
+    <h2>Data Edit</h2>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="save btn btn-primary">Save</button>
+    </form>
+</div>
+{% endblock %}

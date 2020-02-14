@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 col-lg-2">
+        <div class="list-group">
+          {% for kidsProfile in kidsProfiles %}
+            <a href="{% url 'phys:phys_data_list' %}{{kidsProfile.id}}" class="list-group-item list-group-item-action">{{kidsProfile.name}}</a>
+          {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-10 overflow-auto">
+        <form method="post" action="{% url 'phys:phys_data_delete' %}">
+        <table class="table table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th>名前</th>
+              <th>日付</th>
+              <th>体重(kg)</th>
+              <th>身長(cm)</th>
+              <th>修正</th>
+              <th>削除</th>
+            </tr>
+          </thead>
+  	  {% for data_post in data_posts %}
+          <tr>
+            <td class="text-center">{{data_post.kidsProfile.name }}</td class="text-center">
+            <td class="text-center">{{data_post.date }}</td>
+            <td class="text-center">{{data_post.weight }}</td>
+            <td class="text-center">{{data_post.height }}</td>
+            <td class="text-center"><a href="{% url 'phys:phys_data_edit' data_post.pk %}" class="btn btn-success btn-sm" role="button">編集</a></td>
+            <td class="text-center"><input type="checkbox" name="delete_ids" value="{{ data_post.pk }}"></input></td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <td>
+                <a href="{% url 'phys:phys_data_add' %}" role="button" class="btn btn-primary mr-auto">追加</a>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-center">
+              {% csrf_token %}
+              <input type="submit" value="一括削除" class="btn btn-danger float-right">
+            </td>
+          </tr>
+        </table>
+        </form>
+    </div>
+{% endblock %}

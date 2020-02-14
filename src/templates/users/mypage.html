@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block extra_js %}
+<script>
+$(function() {
+  $('.del_confirm').on('click', function () {
+     $("#del_pk").text($(this).data("pk"));
+     $('#del_url').attr('href', $(this).data("url"));
+
+     $(this).attr('href', href);
+  });
+});
+</script>
+{% endblock extra_js %}
+
+{% block content %}
+
+<div class="col-md-12 col-lg-5">
+    <h2>My Page</h2>
+
+    <br>
+    <br>
+
+    <table class = "table">
+      <tr>
+        <td>ユーザー名</td>
+        <td>{{ user }}</td>
+      </tr>
+    </table>
+
+    <table class = "table table-hover">
+      <thead class = "thead-dark">
+        <tr>
+          <th>名前</th>
+          <th>性別</th>
+          <th>誕生日</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      {% for kids_profile in kidsProfiles %}
+      <tr>
+        <td>{{ kids_profile.name }}</td>
+        <td>{{ kids_profile.get_gender_display }}</td>
+        <td>{{ kids_profile.birthday }}</td>
+        <td><a href="{% url 'users:kids_profile_edit' kids_profile.id %}" class="btn btn-success btn-sm">編集</a></td>
+        <td><button type="button" class="btn btn-danger btn-sm del_confirm" data-toggle="modal" data-target="#delete_modal"
+                    data-pk="{{ kids_profile.pk }}" data-url="{% url 'users:kids_profile_delete' kids_profile.pk %}">削除</button></td>
+      </tr>
+
+      {% endfor%}
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><a href="{% url 'users:kids_profile_add' %}" class="btn btn-primary btn-sm" role="button">追加</a></td>
+      </tr>
+    </table>
+
+
+    <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="label1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    削除しても良いですか？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+                    <a href="#" id="del_url" class="btn btn-danger">削除</a>
+                </div>
+             </div>
+         </div>
+    </div>
+</div>
+
+{% endblock content %}

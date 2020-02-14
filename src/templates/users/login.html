@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{{ form.media }}
+
+<div class="col-md-12 col-lg-5">
+    <h2>Login</h2>
+        <form action="" method="POST">
+                {{ form.non_field_errors }}
+                {% bootstrap_form form %}
+                <hr>
+                <button type="submit" class="btn btn-success btn-lg btn-block" >ログイン</button>
+                {% csrf_token %}
+        </form>
+
+
+        <a href="{% url 'users:signup' %}">ユーザー登録</a>
+
+</div>
+{% endblock %}
