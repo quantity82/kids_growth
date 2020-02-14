@@ -9,19 +9,25 @@ from .forms import ShoesDataForm, ShoesDataEditForm
 @login_required
 def shoes_data_list(request, **kwargs):
     user_name = request.user
-    if len(kwargs) > 0:
-        kidsProfileId = kwargs["kidsProfileId"]
-    else:
-        kidsProfileId = KidsProfile.objects.filter(user=user_name).order_by('id')[0].id
+    try:
+        if len(kwargs) > 0:
+            kids_profile_id = kwargs["kidsProfileId"]
+        else:
+            kids_profile_id = KidsProfile.objects.filter(user=user_name).first().id
 
-    kids_profiles = KidsProfile.objects.filter(user=user_name) #子供情報選択用
-    kids_profile  = KidsProfile.objects.filter(id=kidsProfileId)
-    shoes_data_posts = ShoesData.objects.filter(user=user_name, kidsProfile=kidsProfileId).order_by('buy_date')
+        kids_profiles = KidsProfile.objects.filter(user=user_name) #子供情報選択用
+        kids_profile_name  = KidsProfile.objects.get(id=kids_profile_id).name
+        shoes_data_posts = ShoesData.objects.filter(user=user_name, kidsProfile=kids_profile_id).order_by('buy_date')
+
+    except AttributeError:
+        shoes_data_posts = None
+        kids_profiles = None
+        kids_profile_name = "子供情報を登録してください"
 
     params = {
         'shoes_data_posts' : shoes_data_posts,
         'kidsProfiles' : kids_profiles,
-        'kidsName' : kids_profile[0].name,
+        'kidsName' : kids_profile_name,
     }
     return render(request, 'shoes/shoes_data_list.html', params)
 

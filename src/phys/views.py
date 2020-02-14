@@ -15,14 +15,20 @@ import io
 @login_required
 def phys_data_list(request, **kwargs):
     user_name = request.user
-    if len(kwargs) > 0:
-        kidsProfileId = kwargs["kidsProfileId"]
-    else:
-        kidsProfileId = KidsProfile.objects.filter(user=user_name).order_by('id')[0]
 
-    kids_profiles = KidsProfile.objects.filter(user=user_name)
+    try:
+        if len(kwargs) > 0:
+            kidsProfileId = kwargs["kidsProfileId"]
+        else:
+            kidsProfileId = KidsProfile.objects.filter(user=user_name).first().id
 
-    data_posts = PhysData.objects.filter(user=user_name, kidsProfile=kidsProfileId).order_by('date')
+        kids_profiles = KidsProfile.objects.filter(user=user_name)
+        data_posts = PhysData.objects.filter(user=user_name, kidsProfile=kidsProfileId).order_by('date')
+
+    except AttributeError:
+        data_posts = None
+        kids_profiles = None
+
     params = {
         'data_posts': data_posts,
         'kidsProfiles': kids_profiles,
@@ -83,18 +89,24 @@ def phys_data_delete(request):
 @login_required
 def graph_page_display(request, **kwargs):
     user_name = request.user
-    if len(kwargs) > 0:
-        kidsProfileId = kwargs["kidsProfileId"]
-    else:
-        kidsProfileId = KidsProfile.objects.filter(user=user_name).order_by('id')[0].id
+    try:
+        if len(kwargs) > 0:
+            kidsProfileId = kwargs["kidsProfileId"]
+        else:
+            kidsProfileId = KidsProfile.objects.filter(user=user_name).first().id
 
-    kids_profiles = KidsProfile.objects.filter(user=user_name)
-    kids_profile = KidsProfile.objects.filter(id=kidsProfileId)
+        kids_profiles = KidsProfile.objects.filter(user=user_name)
+        kids_name = KidsProfile.objects.get(id=kidsProfileId).name
+
+    except AttributeError:
+        kids_profiles = None
+        kidsProfileId = None
+        kids_name = "子供情報を登録してください"
 
     params = {
         'kidsProfiles' : kids_profiles,
         'kidsProfileId' : kidsProfileId,
-        'kidsName' : kids_profile[0].name,
+        'kidsName' : kids_name,
     }
     return render(request, 'phys/phys_graph_display.html', params)
 
