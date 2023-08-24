@@ -1,6 +1,6 @@
 Django==2.2.10
 psycopg2==2.8.4
-uwsgi==2.0.17
+uwsgi==2.0.22
 django-bootstrap4==1.1.1
 django-bootstrap-datepicker-plus==3.0.5
 pillow==7.0.0
